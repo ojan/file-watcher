@@ -17,6 +17,7 @@
 # ------------ CONFIGURATION ---------
 INOTIFYWAIT=`which inotifywait`
 LOGGER=`which logger`
+LOGGER_CONFIG="--id --priority daemon.notice --tag fs-watcher"
 NC=`which nc`
 NC_CONFIG="-w 1 -u 001.graphite 8125"
 
@@ -25,31 +26,31 @@ message() {
 
 case "${event}" in
         CREATE)
-                ${LOGGER} --id --priority daemon.notice --tag fs-watcher "the file ${file} inside ${dir} has been created"
+                ${LOGGER} ${LOGGER_CONFIG} "the file ${file} inside ${dir} has been created"
 		echo "file-watcher.file.create:1|c" | ${NC} ${NC_CONFIG}
                 ;;
 	CREATE:ISDIR)
-		${LOGGER} --id --priority daemon.notice --tag fs-watcher "the directory ${dir}${file} has been created"
+		${LOGGER} ${LOGGER_CONFIG} "the directory ${dir}${file} has been created"
 		echo "file-watcher.directory.create:1|c" | ${NC} ${NC_CONFIG}
 		;;
 	DELETE:ISDIR)
-                ${LOGGER} --id --priority daemon.notice --tag fs-watcher "the directory ${dir}${file} has been deleted"
+                ${LOGGER} ${LOGGER_CONFIG} "the directory ${dir}${file} has been deleted"
                 echo "file-watcher.directory.delete:1|c" | ${NC} ${NC_CONFIG}
 		;;
         DELETE)
-                ${LOGGER} --id --priority daemon.notice --tag fs-watcher "the file ${file} inside ${dir} has been deleted"
+                ${LOGGER} ${LOGGER_CONFIG} "the file ${file} inside ${dir} has been deleted"
                 echo "file-watcher.file.delete:1|c" | ${NC} ${NC_CONFIG}
 		;;
         MODIFY)
-                ${LOGGER} --id --priority daemon.notice --tag fs-watcher "the file ${file} inside ${dir} has been modified"
+                ${LOGGER} ${LOGGER_CONFIG} "the file ${file} inside ${dir} has been modified"
                 echo "file-watcher.file.modify:1|c" | ${NC} ${NC_CONFIG}
 		;;
         MOVED_FROM)
-                ${LOGGER} --id --priority daemon.notice --tag fs-watcher "the file ${file} has been moved FROM ${dir} directory"
+                ${LOGGER} ${LOGGER_CONFIG} "the file ${file} has been moved FROM ${dir} directory"
                 echo "file-watcher.file.moved_from:1|c" | ${NC} ${NC_CONFIG}
 		;;
         MOVED_TO)
-                ${LOGGER} --id --priority daemon.notice --tag fs-watcher "the file ${file} has been moved TO ${dir} directory"
+                ${LOGGER} ${LOGGER_CONFIG} "the file ${file} has been moved TO ${dir} directory"
                 echo "file-watcher.file.moved_to:1|c" | ${NC} ${NC_CONFIG}
 		;;
 	esac
